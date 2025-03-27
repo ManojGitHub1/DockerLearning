@@ -1,0 +1,39 @@
+version: '3.8'  # Specify the version of the Docker Compose file, must be compatible with comose installed locally
+
+services: # Define the services that will be run
+  mongodb: # Name of the service
+    image: mongo:latest # Image to use for the MongoDB service
+    ports: # Map the host's port to the container's port
+      - "27017:27017" # Map port 27017 on the host to port 27017 on the container
+    environment: # Set environment variables for the MongoDB service
+      - MONGO_INITDB_ROOT_USERNAME=admin # Set the root username for the MongoDB service
+      - MONGO_INITDB_ROOT_PASSWORD=secret # Set the root password for the MongoDB service
+    # Docker compose will automatically create a network named 'project-network' if it doesn't exist
+    # It creates a common network for all services in the same Compose file
+    # networks: # Connect the service to the network
+      # - mongo-network # Connect the service to the network named 'mongo-network'
+
+  mongo-express:
+    image: mongo-express:latest
+    ports:
+      - "8081:8081" 
+    environment:
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=admin
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=secret
+    # networks:
+      # - mongo-network
+    depends_on:
+      - mongodb # Depends on the MongoDB service to start first
+    # mongo-express will automatically connect to the MongoDB service running on the same network
+    # It will use the default port 27017 for the MongoDB service
+    
+
+volumes: # Define volumes to persist data
+  mongodb-data: # Name of the volume
+    driver: local # Driver to use for the volume
+    # driver_opts: # Options to use for the volume
+      # - type: none # Type of the volume
+      # - name: mongodb-data # Name of the volume
+      # - o: bind # Bind mount the volume to the host
+      # - ro: true # Read-only access to the volume
+

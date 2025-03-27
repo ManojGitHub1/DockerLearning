@@ -1,0 +1,51 @@
+
+1. Why Docker Compose?
+    a. Any Services like Fronted, Backend, Database, API, Authentication Services, Database2
+        Even within application may have microservie app(broken down into multiple micro service)
+        So, when creating containarize app all of these must be deployed and run together because they have dependency on each other.
+        Basically, we have set of containers which are running different services/app within them that need to run/talk together. Service need to communicate.
+
+    b. Docker Compose is a tool for defining and running multi-container/services Docker applications in 1 isolated environment.
+        It allows you to define a multi-container application in a single file, and then run that application with a single command.
+        It also provides a way to manage the services in the application, such as starting, stopping, and restarting them.
+     
+2. Without Compose?
+    Docker Network 
+        Allows containers to communicate with each other and with the external world
+        here mongo-network is used in both as common network
+    $ docker network create mongo-network
+    $ docker network ls
+    $ docker run -d \
+        -p 27017:27017 \
+        -e MONGO_INITDB_ROOT_USERNAME=admin \
+        -e MONGO_INITDB_ROOT_PASSWORD=secret \
+        --network mongo-network \
+        --name mongodb \
+        mongo:latest
+    
+    // mongo-express is ui for mongodb
+    // monogo-express connects with mongodb (2 containers in 1 network)
+    $ docker run -d \
+        -p 8081:8081 \
+        -e ME_CONFIG_MONGODB_ADMINUSERNAME=admin \
+        -e ME_CONFIG_MONGODB_ADMINPASSWORD=secret \
+        -e ME_CONFIG_MONGODB_SERVER=mongodb \
+        --network mongo-network \
+        --name mongo-express \
+        mongo-express
+
+    $ docker logs <container-name>
+
+3. With Compose?
+    a. docker-compose.yaml
+        - single yaml file to configure and maintain your app's service
+        - Define the services, network, volumes, and other settings
+        - single command to create and start all services from you configuration
+        - Code that defines how your services should run
+        - code can be versioned, easier collaboration
+
+    $ docker-compose -f docker-compose.yaml up -d
+    $ docker-comper -f docker-compose.yaml down
+**  # stop and remove all containers, networks, volumes, and images
+
+

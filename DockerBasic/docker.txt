@@ -1,0 +1,172 @@
+1. What Docker is?
+    * Linux operating sys.
+    a. Virutalization Software
+    b. Makes developing & deploying app easier
+    c. Packaging app inside container with app(source) code, all necessary libraries, dependencies, configuration, sys tools and runtime comfig.
+    d. So, app+running env = container
+
+
+2. Why Docker is used?
+    a. Each developer needs to install & configure all services directly on their OS(local machine)
+    b. So, Installation process different for each OS.
+    c. So, operation team needs to setup, configure(jar, database, backend...) on server, so dependency version conflict.
+    d. back and forth communication btw Development and operations team
+
+    e.Instead of textual/Manual, everything is packaged insider Docker artifact.
+
+
+    With Containers
+    c. Docker makes it easier to develop & deploy app by packaging app inside container with app(source) code, all necessary libraries, dependencies, configuration, sys tools and runtime comfig.
+    d. own isolated env with 1 docker commd (docker run postgres)
+    e. Docker commd same regardless of OS and Services
+    f. fetches container package from internet and start in local
+    g. Docker is a lightweight virtualization solution that allows developers to run multiple applications on a single machine.
+    h. It uses a containerization technology to package applications and their dependencies into a single, portable container that can be run on any system that supports Docker.
+    i. Docker containers are lightweight and can be created and destroyed quickly, making them ideal for development and testing environments. Docker containers are also highly portable and can be easily moved between different systems, making them ideal for deployment and production environments.
+    j. Docker containers are highly scalable and can be easily scaled up or down to meet changing workloads. Docker containers are also highly secure and can be easily secured by using Docker's built-in security features, such as user namespaces, AppArmor, and SELinux.
+    k. Docker containers are also highly flexible and can be easily customized by using Docker's built-in features, such as environmentled up or down to meet changing workloads.
+    
+
+3. Docker vs Virutal Machine?
+    a. What parts of OS do they virtualize?
+        OS structure
+            1-OS Application Layer
+            2-OS Kernal
+            3-Hardware
+        Docker - 1-OS Application Layer
+        VM - 1-OS Application Layer + 2-OS Kernal
+    
+        *So, when we download a OS image, it contains all the OS application layer and OS Kernal.
+          it boots up its own os creating app-layer and guest-kernel(os).
+        *Here docker containerize Apps and creates Docker layer which interact with Host OS.
+
+    b. Difference?
+        Docker:
+            1-Docker image, couple of MB
+            2-Containers take sec to start
+            3-Compatible only with Linux distros
+                a. If we want to run linux based container on window we can't because 
+                    Linux based Docker image, cannot use Windows Kernal.
+                b. Most containers are Linux based, Originally written and built for Linux.
+                c. So, Docker Desktop (Windows, Mac)
+                *Docker Desktop is a Windows and Mac application that allows you to run Docker containers on your computer.
+                *Uses Hypervisor layer with lightweight linux distro.
+                Comes with Client CLI and GUI.
+        VM:
+            1-VM image, couple of GB
+            2-VM takes min to start
+            3-Compatible with all OS(has it create guest OS)
+
+4. Images vs Contaainers?
+    Image:
+        a. An executable app artifact(like jar file)
+        b. Includes app source code, also complete env config like(if source code is js then node, npm is already installed)
+        c. Add env var, create directories, files, etc.
+        d. Immutable template that defines how container will be realized
+
+    Container:
+        a. Actually starts the application
+        b. A running instance of image.
+        c. That's when container env is created.
+        *You can run multiple containers from 1 Image.
+
+
+5. Public(DockerHub) and Private(google, Amazon, Azure) Registries?
+    Docker Registries (public)
+    a. A Storage and distribution sys for docker images.
+    b. Official images available from apps liks Redis, Mongo, Postgres.
+    c. Offl images are maintained by software authors or in collaboration with Docker community.
+    d. Docker hosts one of the biggest Docker Registry, called DockerHub
+        *Docker Hub is the largest docker image (public) registry where you can upload and download Docker images. It is free to use and anyone can upload and download images.
+    e. Docker Official Images    
+        1- A dedicated team responsible for reviewing and publiching all content in Docker Official images respositories.
+        2- Works in collaboration with software maintainers, security experts.
+        3- However anyone can participate as collaboration takes place openly on GitHub.
+        4- So, a contributor/collaborator pulls request, changes/modifies, pushes to new branch and security experts merges if requirement meet.
+        5- Technology changes so docker images are also updated.
+            Docker images are versioned, 
+            Docker tags are used to identify images by name. latest is default
+
+    Docker Registries (private)
+    a. Google Container Registry, Amazon Elastic Container Registry, Azure Container Registry
+    b. Nexus (popular artifact repository manager)
+    c. 3rd party services that provide Docker image hosting and distribution.
+    d. You need to authenticate before accessing the registry.
+    *Authentication is done using Docker credentials, which are stored in the Docker client configuration file.
+    
+
+6. Registry vs Repository
+    Registry
+    a. Registry is a storage and distribution system for Docker images.
+    b. A service providing storage.
+    c. Collection of repositories.
+    Repository
+    a. Repository is a collection of Docker images.
+    b. Collection of related images with same name but diff versions.
+
+    *e.g- DockerHub is a registry, On DockerHub you can host private or public repositories for your app.
+
+
+6. Docker commands?
+    1.Pull and run from public registries(Docker Hub)
+        docker images # list all images
+        docker ps # list all running containers
+        a. docker pull <image_name> <tag> (docker pull nginx:1.23) DockerHub registry (docker.io) is used by default
+        c. Docker generates a random name for the container automatically if you don't specify one
+        e. docker logs <container_id> (show logs of container)    
+        f. docker start <container_id> (start container)
+        g. docker ps -a (list all containers)
+        h. docker stop <container_id> (stop container)
+        i. docker stop <container_name>
+        *j. docker run --name <container_name> -d -p 9000:80 <image_name>:<tag>
+        k. docker build -t <image_name>:<tag> <path_to_dockerfile>
+
+        To access postgres from terminal
+        l. docker exec -it <container_name> psql -U <image_name>
+
+
+    2. Container Port vs Host Posrt (Port Binding)
+        a. Application inside container runs in an isolated Docker network
+        b. This allows us to run the same app running on same port multiple times.
+        c. We need to expose the container port to the host (the machine the container runs on)
+        *So, we need to map container port to host port.
+
+        Port Binding: Bind the Container's port to host's port to make the service available to outside world.
+        docker run -d -p <host_port>:<container_port> <image_name>:<tag>        
+        *Only 1 service can run on specific port on host machine.
+        e.g-only 1 service can run on port 9000
+        *Standard to use the same port on your host as container is using
+        e.g-mysql port=3306, container port=3306
+        
+
+
+7. Create own Image (Dockerfile)
+    a. Dockerfile is a text document that contains commands to assemble an image
+    b. Docker can then build an image by reading those instruction.
+    c. Dockerfile->(build)->Image->(run)->Container
+    d. dockerize Node.js app
+
+    *
+    e. Dockerfile start from a parent image or "base image".
+    f. It's a Docker image that your image is based on
+    g. You choose the base image, depending on which tools you need to have available.
+    h. FROM -Dockerfile must begin with FROM instruction (build this image from specified image)
+    i. RUN - Will execute any command in a shell inside the container env.
+    j. COPY - copies files or directories from <src> and adds them  to filesys of container at path <dest>
+        While "RUN" is executed in container, "COPY" is executed on host
+        e.g- COPY package.json /app/ (/app/) is preesent in virtual file sys of container.
+    i. WORKDIR - Sets the working directory for all following commands.
+        like changing into a directory: "cd .."
+    j. CMD - Command to run when Docker container starts.
+        there can only be one "CMD" inst in Dockerfile.
+        e.g- CMD ["node", "index.js"]
+    k. EXPOSE - Exposes the port(s) on the host that the container listens on.
+    e.g- EXPOSE 8080
+
+
+    Multi-Layer Approach
+        a. Every image consists of multiple image layers
+        b. This makes Docker so efficient, because image layers can be cached.
+        c. 1st layer is the base image, 2nd layer is the layer that contains the application code, 3rd layer is the layer that contains the dependencies, etc.
+        d. These layers are stacked & each one is a delta of changes from the previous layer.
+
