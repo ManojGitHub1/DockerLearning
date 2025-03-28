@@ -20,7 +20,7 @@ DockerLearning
     With Containers
     c. Docker makes it easier to develop & deploy app by packaging app inside container with app(source) code, all necessary libraries, dependencies, configuration, sys tools and runtime comfig.
     d. own isolated env with 1 docker commd (docker run postgres)
-    e. Docker commd same regardless of OS and Services
+    e. Docker commd are same regardless of OS and Services
     f. fetches container package from internet and start in local
     g. Docker is a lightweight virtualization solution that allows developers to run multiple applications on a single machine.
     h. It uses a containerization technology to package applications and their dependencies into a single, portable container that can be run on any system that supports Docker.
@@ -39,7 +39,7 @@ DockerLearning
         VM - 1-OS Application Layer + 2-OS Kernal
     
         *So, when we download a OS image, it contains all the OS application layer and OS Kernal.
-          it boots up its own os creating app-layer and guest-kernel(os).
+          it boots up its own OS creating app-layer and guest-kernel(OS).
         *Here docker containerize Apps and creates Docker layer which interact with Host OS.
 
     b. Difference?
@@ -59,7 +59,7 @@ DockerLearning
             2-VM takes min to start
             3-Compatible with all OS(has it create guest OS)
 
-4. Images vs Contaainers?
+4. Images vs Containers?
     Image:
         a. An executable app artifact(like jar file)
         b. Includes app source code, also complete env config like(if source code is js then node, npm is already installed)
